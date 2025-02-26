@@ -105,12 +105,13 @@ esp_err_t led_strip_init(void)
     ESP_ERROR_CHECK(rmt_enable(led_chan));
 
     BaseType_t xReturned;
-    xReturned = xTaskCreate(controllerTask,
-                            "LED Controller Task",
-                            3072,
-                            NULL,
-                            5,
-                            &xHandle);
+    xReturned = xTaskCreatePinnedToCore(controllerTask,
+                                        "LED Controller Task",
+                                        3072,
+                                        NULL,
+                                        5,
+                                        &xHandle,
+                                        1);
 
     if (xReturned == pdPASS)
     {

@@ -10,6 +10,21 @@
 
 static const char *TAG = "Main";
 
+void print_task_info()
+{
+    TaskStatus_t task_array[20];
+    UBaseType_t task_count, i;
+
+    task_count = uxTaskGetNumberOfTasks();
+
+    uxTaskGetSystemState(task_array, task_count, NULL);
+    ESP_LOGI("TaskMonitor", "Task count: %d", task_count);
+    for (i = 0; i < task_count; i++)
+    {
+        ESP_LOGI("TaskMonitor", "Task: %s | Core: %d | Priority: %d",
+                 task_array[i].pcTaskName, task_array[i].uxCoreAffinityMask, task_array[i].uxBasePriority);
+    }
+}
 
 void app_main(void)
 {
@@ -20,8 +35,8 @@ void app_main(void)
 
     while (1)
     {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        ESP_LOGI(TAG, "In main loop...");
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
 
+        print_task_info();
     }
 }
